@@ -23,10 +23,10 @@ Technologies Used
 - Multithreading
 How to Run
 1. Compile:
-javac -cp "lib/*" -d bin @sources.txt
+javac -cp ".;lib/sqlite-jdbc-3.45.1.0.jar;lib/slf4j-api-2.0.9.jar;lib/slf4j-simple-2.0.9.jar" -d bin src\main\java\com\library\MainApp.java src\main\java\com\library\dao\*.java src\main\java\com\library\service\*.java src\main\java\com\library\model\*.java src\main\java\com\library\util\*.java src\main\java\com\library\ui\console\*.java src\main\java\com\library\ui\gui\*.java
 
 2. Run:
-java -cp "bin;lib/*" com.library.MainApp
+java -cp ".;bin;lib/sqlite-jdbc-3.45.1.0.jar;lib/slf4j-api-2.0.9.jar;lib/slf4j-simple-2.0.9.jar" com.library.MainApp
 Important Note
 Every time the client wants to run the project:
 1. Compile the code

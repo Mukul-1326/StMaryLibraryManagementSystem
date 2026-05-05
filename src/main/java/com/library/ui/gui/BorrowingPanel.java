@@ -103,6 +103,20 @@ public class BorrowingPanel extends JPanel {
             return;
         }
 
+        // MANDATORY VALIDATION (ADDED)
+        try {
+            java.time.LocalDate borrow = java.time.LocalDate.parse(borrowDate);
+            java.time.LocalDate due = java.time.LocalDate.parse(dueDate);
+
+            if (due.isBefore(borrow)) {
+                JOptionPane.showMessageDialog(this, "Due date must be after borrow date");
+                return;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Invalid date values");
+            return;
+        }
+
         Borrowing b = new Borrowing(
                 Integer.parseInt(bookId),
                 Integer.parseInt(memberId),

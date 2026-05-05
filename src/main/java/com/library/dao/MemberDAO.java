@@ -15,7 +15,7 @@ public class MemberDAO {
 
     // CREATE
     public void addMember(Member m) {
-        String sql = "INSERT INTO Member VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO members VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -40,7 +40,7 @@ public class MemberDAO {
 
         try (Connection conn = DBConnection.connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM Member")) {
+                ResultSet rs = stmt.executeQuery("SELECT * FROM members")) {
 
             while (rs.next()) {
                 list.add(mapRow(rs));
@@ -56,7 +56,7 @@ public class MemberDAO {
 
     // UPDATE
     public void updateMember(Member m) {
-        String sql = "UPDATE Member SET name=?, email=?, membership_type=? WHERE member_id=?";
+        String sql = "UPDATE members SET member_name=?, email=?, membership_type=? WHERE member_id=?";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -77,7 +77,7 @@ public class MemberDAO {
 
     // DELETE
     public void deleteMember(int id) {
-        String sql = "DELETE FROM Member WHERE member_id=?";
+        String sql = "DELETE FROM members WHERE member_id=?";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -97,7 +97,7 @@ public class MemberDAO {
     public List<Member> search(String keyword) {
         List<Member> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM Member WHERE name LIKE ? OR email LIKE ?";
+        String sql = "SELECT * FROM members WHERE member_name LIKE ? OR email LIKE ?";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -122,7 +122,7 @@ public class MemberDAO {
     public List<Member> advancedSearch(String name, String email, String type) {
         List<Member> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM Member WHERE name LIKE ? AND email LIKE ? AND membership_type LIKE ?";
+        String sql = "SELECT * FROM members WHERE member_name LIKE ? AND email LIKE ? AND membership_type LIKE ?";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -148,7 +148,7 @@ public class MemberDAO {
     public List<Member> filterByType(String type) {
         List<Member> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM Member WHERE membership_type=?";
+        String sql = "SELECT * FROM members WHERE membership_type=?";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -172,7 +172,7 @@ public class MemberDAO {
     public List<Member> getSortedMembers() {
         List<Member> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM Member ORDER BY name ASC";
+        String sql = "SELECT * FROM members ORDER BY member_name ASC";
 
         try (Connection conn = DBConnection.connect();
                 Statement stmt = conn.createStatement();
@@ -194,7 +194,7 @@ public class MemberDAO {
     private Member mapRow(ResultSet rs) throws SQLException {
         return new Member(
                 rs.getInt("member_id"),
-                rs.getString("name"),
+                rs.getString("member_name"),
                 rs.getString("email"),
                 rs.getString("membership_type"));
     }

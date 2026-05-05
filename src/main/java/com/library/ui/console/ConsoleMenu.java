@@ -199,18 +199,35 @@ public class ConsoleMenu {
 
         sc.nextLine();
 
-        System.out.print("Borrow Date: ");
+        System.out.print("Borrow Date (YYYY-MM-DD): ");
         String borrowDate = sc.nextLine();
 
-        System.out.print("Due Date: ");
+        System.out.print("Due Date (YYYY-MM-DD): ");
         String dueDate = sc.nextLine();
 
         if (!ValidationUtil.isValidDate(borrowDate) || !ValidationUtil.isValidDate(dueDate)) {
-            System.out.println("Invalid Date");
+            System.out.println("Invalid Date Format");
             return;
         }
 
-        borrowingService.addBorrowing(new Borrowing(bookId, memberId, borrowDate, dueDate, "Borrowed"));
+        //
+        try {
+            java.time.LocalDate borrow = java.time.LocalDate.parse(borrowDate);
+            java.time.LocalDate due = java.time.LocalDate.parse(dueDate);
+
+            if (due.isBefore(borrow)) {
+                System.out.println("Due date must be after borrow date");
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid date values");
+            return;
+        }
+
+        borrowingService.addBorrowing(
+                new Borrowing(bookId, memberId, borrowDate, dueDate, "Borrowed"));
+
+        // Existing logic (UNCHANGED)
         bookService.markAsBorrowed(bookId);
     }
 

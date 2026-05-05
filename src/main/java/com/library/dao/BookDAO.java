@@ -15,7 +15,7 @@ public class BookDAO {
 
     // CREATE
     public void addBook(Book book) {
-        String sql = "INSERT INTO Book VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO books VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -41,7 +41,7 @@ public class BookDAO {
 
         try (Connection conn = DBConnection.connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM Book")) {
+                ResultSet rs = stmt.executeQuery("SELECT * FROM books")) {
 
             while (rs.next()) {
                 list.add(mapRow(rs));
@@ -57,7 +57,7 @@ public class BookDAO {
 
     // UPDATE
     public void updateBook(Book book) {
-        String sql = "UPDATE Book SET title=?, author=?, category=? WHERE book_id=?";
+        String sql = "UPDATE books SET title=?, author=?, category=? WHERE book_id=?";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -79,7 +79,7 @@ public class BookDAO {
     // DELETE
     public void deleteBook(int id) {
         try (Connection conn = DBConnection.connect();
-                PreparedStatement stmt = conn.prepareStatement("DELETE FROM Book WHERE book_id=?")) {
+                PreparedStatement stmt = conn.prepareStatement("DELETE FROM books WHERE book_id=?")) {
 
             stmt.setInt(1, id);
             stmt.executeUpdate();
@@ -94,7 +94,7 @@ public class BookDAO {
     // BASIC SEARCH
     public List<Book> search(String keyword) {
         List<Book> list = new ArrayList<>();
-        String sql = "SELECT * FROM Book WHERE title LIKE ? OR author LIKE ?";
+        String sql = "SELECT * FROM books WHERE title LIKE ? OR author LIKE ?";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -119,7 +119,7 @@ public class BookDAO {
     public List<Book> advancedSearch(String title, String author, String category) {
         List<Book> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM Book WHERE title LIKE ? AND author LIKE ? AND category LIKE ?";
+        String sql = "SELECT * FROM books WHERE title LIKE ? AND author LIKE ? AND category LIKE ?";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -145,7 +145,7 @@ public class BookDAO {
     public List<Book> filterByCategory(String category) {
         List<Book> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM Book WHERE category=?";
+        String sql = "SELECT * FROM books WHERE category=?";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -169,7 +169,7 @@ public class BookDAO {
     public List<Book> getSortedBooks() {
         List<Book> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM Book ORDER BY title ASC";
+        String sql = "SELECT * FROM books ORDER BY title ASC";
 
         try (Connection conn = DBConnection.connect();
                 Statement stmt = conn.createStatement();
@@ -200,7 +200,7 @@ public class BookDAO {
     private void updateStatus(int bookId, String status) {
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(
-                        "UPDATE Book SET availability_status=? WHERE book_id=?")) {
+                        "UPDATE books SET availability_status=? WHERE book_id=?")) {
 
             stmt.setString(1, status);
             stmt.setInt(2, bookId);

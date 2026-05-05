@@ -39,37 +39,37 @@ public class DBConnection {
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement()) {
 
-            // BOOK TABLE
-            stmt.execute("CREATE TABLE IF NOT EXISTS Book (" +
+            // BOOK TABLE (UPDATED NAME)
+            stmt.execute("CREATE TABLE IF NOT EXISTS books (" +
                     "book_id INTEGER PRIMARY KEY," +
                     "title TEXT NOT NULL," +
                     "author TEXT NOT NULL," +
-                    "category TEXT," +
+                    "category TEXT NOT NULL," +
                     "availability_status TEXT NOT NULL)");
 
-            // MEMBER TABLE
-            stmt.execute("CREATE TABLE IF NOT EXISTS Member (" +
+            // MEMBER TABLE (UPDATED NAME + COLUMN)
+            stmt.execute("CREATE TABLE IF NOT EXISTS members (" +
                     "member_id INTEGER PRIMARY KEY," +
-                    "name TEXT NOT NULL," +
-                    "email TEXT UNIQUE NOT NULL," +
+                    "member_name TEXT NOT NULL," +
+                    "email TEXT NOT NULL," +
                     "membership_type TEXT NOT NULL)");
 
-            // BORROWING TABLE
-            stmt.execute("CREATE TABLE IF NOT EXISTS Borrowing (" +
-                    "borrowing_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            // BORROWING TABLE (UPDATED NAME + COLUMN)
+            stmt.execute("CREATE TABLE IF NOT EXISTS borrow_records (" +
+                    "record_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "book_id INTEGER NOT NULL," +
                     "member_id INTEGER NOT NULL," +
                     "borrow_date TEXT NOT NULL," +
                     "due_date TEXT NOT NULL," +
                     "return_date TEXT," +
-                    "status TEXT NOT NULL," +
-                    "FOREIGN KEY(book_id) REFERENCES Book(book_id)," +
-                    "FOREIGN KEY(member_id) REFERENCES Member(member_id))");
+                    "return_status TEXT NOT NULL," +
+                    "FOREIGN KEY(book_id) REFERENCES books(book_id)," +
+                    "FOREIGN KEY(member_id) REFERENCES members(member_id))");
 
-            // PERFORMANCE OPTIMIZATION (ADVANCED)
-            stmt.execute("CREATE INDEX IF NOT EXISTS idx_book_title ON Book(title)");
-            stmt.execute("CREATE INDEX IF NOT EXISTS idx_member_name ON Member(name)");
-            stmt.execute("CREATE INDEX IF NOT EXISTS idx_borrow_date ON Borrowing(borrow_date)");
+            // PERFORMANCE OPTIMIZATION (UNCHANGED)
+            stmt.execute("CREATE INDEX IF NOT EXISTS idx_book_title ON books(title)");
+            stmt.execute("CREATE INDEX IF NOT EXISTS idx_member_name ON members(member_name)");
+            stmt.execute("CREATE INDEX IF NOT EXISTS idx_borrow_date ON borrow_records(borrow_date)");
 
             System.out.println("Database initialized successfully");
 

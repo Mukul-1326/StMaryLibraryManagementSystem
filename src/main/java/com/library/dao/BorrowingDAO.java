@@ -15,7 +15,7 @@ public class BorrowingDAO {
 
     // CREATE
     public void addBorrowing(Borrowing b) {
-        String sql = "INSERT INTO Borrowing (book_id, member_id, borrow_date, due_date, status) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO borrow_records (book_id, member_id, borrow_date, due_date, return_status) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -41,7 +41,7 @@ public class BorrowingDAO {
 
         try (Connection conn = DBConnection.connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM Borrowing")) {
+                ResultSet rs = stmt.executeQuery("SELECT * FROM borrow_records")) {
 
             while (rs.next()) {
                 list.add(mapRow(rs));
@@ -55,11 +55,11 @@ public class BorrowingDAO {
         return list;
     }
 
-    //
+    // SEARCH
     public List<Borrowing> search(int bookId, int memberId) {
         List<Borrowing> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM Borrowing WHERE 1=1";
+        String sql = "SELECT * FROM borrow_records WHERE 1=1";
 
         if (bookId != -1) {
             sql += " AND book_id=" + bookId;
@@ -89,7 +89,7 @@ public class BorrowingDAO {
     public List<Borrowing> filterByDateRange(String startDate, String endDate) {
         List<Borrowing> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM Borrowing WHERE borrow_date BETWEEN ? AND ?";
+        String sql = "SELECT * FROM borrow_records WHERE borrow_date BETWEEN ? AND ?";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -113,7 +113,7 @@ public class BorrowingDAO {
 
     // RETURN BOOK
     public void returnBook(int bookId) {
-        String sql = "UPDATE Borrowing SET status='Returned', return_date=date('now') WHERE book_id=? AND status='Borrowed'";
+        String sql = "UPDATE borrow_records SET return_status='Returned', return_date=date('now') WHERE book_id=? AND return_status='Borrowed'";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -130,7 +130,7 @@ public class BorrowingDAO {
 
     // DELETE
     public void deleteBorrowing(int bookId) {
-        String sql = "DELETE FROM Borrowing WHERE book_id=?";
+        String sql = "DELETE FROM borrow_records WHERE book_id=?";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -147,7 +147,7 @@ public class BorrowingDAO {
 
     // OVERDUE UPDATE
     public void updateOverdueStatus() {
-        String sql = "UPDATE Borrowing SET status='Overdue' WHERE status='Borrowed' AND date(due_date) < date('now')";
+        String sql = "UPDATE borrow_records SET return_status='Overdue' WHERE return_status='Borrowed' AND date(due_date) < date('now')";
 
         try (Connection conn = DBConnection.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -166,7 +166,7 @@ public class BorrowingDAO {
 
         try (Connection conn = DBConnection.connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM Borrowing WHERE status='Overdue'")) {
+                ResultSet rs = stmt.executeQuery("SELECT * FROM borrow_records WHERE return_status='Overdue'")) {
 
             while (rs.next()) {
                 list.add(mapRow(rs));
@@ -186,7 +186,7 @@ public class BorrowingDAO {
 
         try (Connection conn = DBConnection.connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM Borrowing ORDER BY borrow_date ASC")) {
+                ResultSet rs = stmt.executeQuery("SELECT * FROM borrow_records ORDER BY borrow_date ASC")) {
 
             while (rs.next()) {
                 list.add(mapRow(rs));
@@ -207,6 +207,6 @@ public class BorrowingDAO {
                 rs.getInt("member_id"),
                 rs.getString("borrow_date"),
                 rs.getString("due_date"),
-                rs.getString("status"));
+                rs.getString("return_status"));
     }
 }

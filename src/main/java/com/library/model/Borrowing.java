@@ -7,13 +7,24 @@ public class Borrowing {
     private String borrowDate;
     private String dueDate;
     private String returnDate;
-    private String status;
+    private String status; // maps to return_status in DB
 
+    // EXISTING CONSTRUCTOR (UNCHANGED)
     public Borrowing(int bookId, int memberId, String borrowDate, String dueDate, String status) {
         this.bookId = bookId;
         this.memberId = memberId;
         this.borrowDate = borrowDate;
         this.dueDate = dueDate;
+        this.status = status;
+    }
+
+    //
+    public Borrowing(int bookId, int memberId, String borrowDate, String dueDate, String returnDate, String status) {
+        this.bookId = bookId;
+        this.memberId = memberId;
+        this.borrowDate = borrowDate;
+        this.dueDate = dueDate;
+        this.returnDate = returnDate;
         this.status = status;
     }
 
